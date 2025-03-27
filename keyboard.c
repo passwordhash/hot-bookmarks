@@ -1,4 +1,5 @@
 #include "keyboard.h"
+#include "active_app.h"
 #include "logger.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -70,9 +71,11 @@ CGEventRef keyboard_callback(CGEventTapProxy proxy, CGEventType type, CGEventRef
 
         if (current_mode == MODE_BIND_ADD)
         {
-            // для теста добавляем калькулятор
-            char app_to_bind[MAX_APP_PATH_LEN] = "/Applications/Cdye.app";
-            strcpy(binds[index].app_path, app_to_bind);
+            char path_buf[MAX_APP_PATH_LEN];
+
+            get_active_app_path(path_buf, MAX_APP_PATH_LEN);
+
+            strcpy(binds[index].app_path, path_buf);
             binds[index].is_bound = 1;
             log_message(LOG_INFO, "Добавлен биндинг");
         }
@@ -92,6 +95,7 @@ CGEventRef keyboard_callback(CGEventTapProxy proxy, CGEventType type, CGEventRef
             if (cmd_res != 0)
             {
                 log_error("Ошибка при запуске приложения");
+                return event;
             }
 
             log_message(LOG_INFO, "Запущено приложение");
