@@ -1,6 +1,6 @@
 #ifndef LOGGER_H__
 
-#define LOG_FILENAME "keybinder.log"
+#define LOG_FILENAME "hot-bookmarks.log"
 
 typedef enum
 {
