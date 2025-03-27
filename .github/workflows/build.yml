@@ -1,0 +1,24 @@
+name: Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build project
+        run: |
+          make clean
+          make 
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: hot-bookmarks
+          path: hot-bookmarks.out
