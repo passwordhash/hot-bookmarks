@@ -1,7 +1,7 @@
 #include "keyboard.h"
-#include <strings.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <strings.h>
 
 #define MAX_APP_PATH_LEN 512
 #define MAX_CMD_LEN 1024

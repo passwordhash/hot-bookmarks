@@ -4,6 +4,7 @@
  * мыши.
  */
 #include "keyboard.h"
+#include "logger.h"
 #include <ApplicationServices/ApplicationServices.h>
 #include <stdio.h>
 
@@ -11,6 +12,8 @@
 
 int main(void)
 {
+    log_info("Запуск программы...");
+
     // создаем event tap для прослушивания клавиатуры (точка перехвата глобальных событий)
     CFMachPortRef event_tap = CGEventTapCreate(kCGSessionEventTap, kCGHeadInsertEventTap, kCGEventTapOptionDefault,
                                                CGEventMaskBit(kCGEventKeyDown), keyboard_callback, NULL);
