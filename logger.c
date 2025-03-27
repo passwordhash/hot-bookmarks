@@ -2,8 +2,6 @@
 #include <stdio.h>
 #include <time.h>
 
-#define LOG_FILENAME "keybinder.log"
-
 void log_message(LogLevel level, const char *message)
 {
     const char *level_str;

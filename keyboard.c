@@ -1,4 +1,5 @@
 #include "keyboard.h"
+#include "logger.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
@@ -49,17 +50,17 @@ CGEventRef keyboard_callback(CGEventTapProxy proxy, CGEventType type, CGEventRef
 
     char pressed = pressed_str[0];
 
-    if (pressed == 'x')
+    if (pressed == '=')
     {
         current_mode = MODE_BIND_ADD;
-        // TODO: logging
+        log_debug("Включен мод добавления бинда");
         return event;
     }
 
     if (pressed == '-')
     {
         current_mode = MODE_BIND_REMOVE;
-        // TODO: logging
+        log_debug("Включен мод удаления бинда");
         return event;
     }
 
@@ -70,21 +71,30 @@ CGEventRef keyboard_callback(CGEventTapProxy proxy, CGEventType type, CGEventRef
         if (current_mode == MODE_BIND_ADD)
         {
             // для теста добавляем калькулятор
-            char app_to_bind[MAX_APP_PATH_LEN] = "/Applications/Calculator.app";
+            char app_to_bind[MAX_APP_PATH_LEN] = "/Applications/Cdye.app";
             strcpy(binds[index].app_path, app_to_bind);
-            // TODO: logging
+            binds[index].is_bound = 1;
+            log_message(LOG_INFO, "Добавлен биндинг");
         }
         else if (current_mode == MODE_BIND_REMOVE)
         {
             binds[index].is_bound = 0;
             binds[index].app_path[0] = '\0';
+            log_debug("Удален биндинг");
         }
         else if (current_mode == MODE_NORMAL && binds[index].is_bound)
         {
             char cmd[MAX_CMD_LEN];
-            snprintf(cmd, MAX_CMD_LEN, "open \"%s\"", binds[index].app_path);
-            system(cmd);
-            // TODO: logging
+
+            snprintf(cmd, MAX_CMD_LEN, "open \"%s\" >> %s 2>&1", binds[index].app_path, LOG_FILENAME);
+            int cmd_res = system(cmd);
+
+            if (cmd_res != 0)
+            {
+                log_error("Ошибка при запуске приложения");
+            }
+
+            log_message(LOG_INFO, "Запущено приложение");
         }
 
         current_mode = MODE_NORMAL;
