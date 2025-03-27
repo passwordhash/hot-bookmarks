@@ -1,0 +1,45 @@
+# Compiled Object files
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.lib
+*.a
+
+# Executable files
+*.exe
+*.out
+*.app
+
+# Debug files
+*.ilk
+*.pdb
+*.log
+
+# Build directories (for make, cmake, etc.)
+build/
+bin/
+cmake-build-*/
+
+# CMake generated files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# VS Code settings
+.vscode/
+
+# Temporary files
+*~
+*.tmp
+*.bak
