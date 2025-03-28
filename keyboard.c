@@ -78,12 +78,18 @@ CGEventRef keyboard_callback(CGEventTapProxy proxy, CGEventType type, CGEventRef
             strcpy(binds[index].app_path, path_buf);
             binds[index].is_bound = 1;
             log_message(LOG_INFO, "Добавлен биндинг");
+
+            current_mode = MODE_NORMAL;
+            return NULL; 
         }
         else if (current_mode == MODE_BIND_REMOVE)
         {
             binds[index].is_bound = 0;
             binds[index].app_path[0] = '\0';
             log_debug("Удален биндинг");
+
+            current_mode = MODE_NORMAL;
+            return NULL; // блокируем дальнейшую обработку
         }
         else if (current_mode == MODE_NORMAL && binds[index].is_bound)
         {
@@ -99,6 +105,7 @@ CGEventRef keyboard_callback(CGEventTapProxy proxy, CGEventType type, CGEventRef
             }
 
             log_message(LOG_INFO, "Запущено приложение");
+            return NULL; 
         }
 
         current_mode = MODE_NORMAL;
