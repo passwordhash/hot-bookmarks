@@ -1,13 +1,25 @@
 CC = clang
-CFLAGS = -std=c99 -Wall -Isrc -Wextra -Werror -Wpedantic -Wfloat-equal 
-FRAMEWORKS = -framework ApplicationServices
+CFLAGS = -std=c99 -Wall -Wextra -Wpedantic -Wfloat-equal -Isrc `pkg-config --cflags gtk4`
+CFLAGS += -Wno-typedef-redefinition
+LDFLAGS = `pkg-config --libs gtk4` -framework ApplicationServices
+
 TARGET = hot-bookmarks.out
-SRCS = src/main.c src/keyboard.c src/logger.c src/active_app.c
+SRCDIR = src
+
+# находит все существующие файлы, подходящие под шаблон
+SRCS = $(wildcard $(SRCDIR)/*.c)
+# замена расширения .c на .o
+OBJS = $(SRCS:.c=.o)
 
 all: $(TARGET)
 
-$(TARGET): $(SRCS)
-	@$(CC) $(CFLAGS) $(SRCS) $(FRAMEWORKS) -o $(TARGET)
+# линковка объектных файлов
+$(TARGET): $(OBJS)
+	$(CC) $(OBJS) $(LDFLAGS) -o $(TARGET)
+
+# rule pattern. Если файл .o не найден, то он будет собран из .c
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(TARGET)
+	rm -f $(OBJS) $(TARGET)

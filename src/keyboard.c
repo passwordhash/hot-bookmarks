@@ -1,21 +1,11 @@
 #include "keyboard.h"
 #include "active_app.h"
+#include "consts.h"
 #include "logger.h"
+#include "types.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
-
-#define MAX_APP_PATH_LEN 512
-#define MAX_CMD_LEN 1024
-
-#define STR_LEN 10
-#define MAX_BINDS 10
-
-typedef struct
-{
-    int is_bound;                    // есть ли bind для цифры
-    char app_path[MAX_APP_PATH_LEN]; // путь к приложению или идентификатор окна
-} KeyBind;
 
 KeyBind binds[MAX_BINDS] = {0};
 
@@ -81,7 +71,7 @@ CGEventRef keyboard_callback(CGEventTapProxy proxy, CGEventType type, CGEventRef
             log_message(LOG_INFO, "Добавлен биндинг");
 
             current_mode = MODE_NORMAL;
-            return NULL; 
+            return NULL;
         }
         else if (current_mode == MODE_BIND_REMOVE)
         {
@@ -106,7 +96,7 @@ CGEventRef keyboard_callback(CGEventTapProxy proxy, CGEventType type, CGEventRef
             }
 
             log_message(LOG_INFO, "Запущено приложение");
-            return NULL; 
+            return NULL;
         }
 
         current_mode = MODE_NORMAL;
