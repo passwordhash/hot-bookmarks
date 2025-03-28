@@ -31,6 +31,7 @@ AppMode current_mode = MODE_NORMAL;
 CGEventRef keyboard_callback(CGEventTapProxy proxy, CGEventType type, CGEventRef event, void *refcon)
 {
     (void)proxy;
+    (void)refcon;
 
     if (type != kCGEventKeyDown)
     {
