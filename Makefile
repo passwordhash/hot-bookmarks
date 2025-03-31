@@ -1,7 +1,8 @@
 CC = clang
-CFLAGS = -std=c99 -Wall -Wextra -Wpedantic -Wfloat-equal -Isrc `pkg-config --cflags gtk+-3.0`
+CFLAGS = -std=c99 -Wall -Wextra -Wpedantic -Wfloat-equal -Isrc
 CFLAGS += -Wno-typedef-redefinition
-LDFLAGS = `pkg-config --libs gtk+-3.0` -framework ApplicationServices
+# LDFLAGS = `pkg-config --libs gtk+-3.0` -framework ApplicationServices
+LDFLAGS = -framework ApplicationServices
 
 TARGET = hot-bookmarks.out
 SRCDIR = src
