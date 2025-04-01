@@ -1,3 +1,5 @@
+#include "cf_loop.h"
+#include "gtk_app.h"
 #include "keyboard.h"
 #include "logger.h"
 /** @note
@@ -6,6 +8,8 @@
  * мыши.
  */
 #include <ApplicationServices/ApplicationServices.h>
+#include <CoreFoundation/CoreFoundation.h>
+#include <gtk/gtk.h>
 #include <stdio.h>
 
 #define STR_LEN 10
@@ -13,6 +17,12 @@
 int main(void)
 {
     log_info("Запуск программы...");
+
+    GtkApplication *app = gtk_application_new("com.passwordhash.hot-bookmarks", G_APPLICATION_FLAGS_NONE);
+    g_signal_connect(app, "activate", G_CALLBACK(on_activate), NULL);
+
+    CFRunLoopTimerRef timer = create_cf_timer();
+    CFRunLoopAddTimer(CFRunLoopGetCurrent(), timer, kCFRunLoopDefaultMode);
 
     // создаем event tap для прослушивания клавиатуры (точка перехвата глобальных событий)
     CFMachPortRef event_tap = CGEventTapCreate(kCGSessionEventTap, kCGHeadInsertEventTap, kCGEventTapOptionDefault,
@@ -24,7 +34,12 @@ int main(void)
     CFRunLoopAddSource(CFRunLoopGetCurrent(), run_loop_source, kCFRunLoopCommonModes);
     CGEventTapEnable(event_tap, true);
 
+    int status = g_application_run(G_APPLICATION(app), 0, NULL);
+
+    CFRelease(timer);
+    g_object_unref(app);
+
     CFRunLoopRun();
 
-    return 0;
+    return status;
 }
